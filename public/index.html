@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>对味了</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- 噪点纹理 -->
+<svg class="noise-overlay" id="noise-overlay" aria-hidden="true">
+  <filter id="noise-filter">
+    <feTurbulence type="fractalNoise" baseFrequency=".65" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#noise-filter)"/>
+</svg>
+
+<!-- 环境光球 -->
+<div class="ambient-orbs" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<div class="container">
+  <div class="top-icons">
+    <div id="history-toggle" class="icon-btn" title="搜索历史">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    </div>
+    <div id="wishlist-toggle" class="icon-btn" title="想玩清单">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    </div>
+  </div>
+  <div class="top-icons-right">
+    <div id="theme-toggle" class="icon-btn" title="切换主题">
+      <svg id="icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </div>
+  </div>
+  <div id="search-history" class="dropdown-panel hidden"></div>
+  <div id="wishlist-panel" class="dropdown-panel hidden"></div>
+
+  <header class="header">
+    <img src="logo.png" alt="对味了" class="title-logo">
+    <p class="subtitle">懒得挑？我帮你找对味的</p>
+  </header>
+
+  <!-- 模式切换 -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" data-mode="game">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="16" cy="10" r="1"/><circle cx="18" cy="12" r="1"/></svg>
+      找游戏
+    </button>
+    <button class="mode-tab" data-mode="movie">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 7h5M17 17h5"/></svg>
+      找影视
+    </button>
+  </div>
+
+  <div class="search-area">
+    <div class="search-box">
+      <textarea id="search-input" placeholder="比如：多角色、高自由度、操作简单、可以挂机的游戏" rows="2" maxlength="500"></textarea>
+      <button id="search-btn" class="btn-search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 游戏标签选择器 -->
+  <div id="tag-selector" class="tag-selector">
+    <div class="tag-labels">
+      <span class="tag-label" data-group="0"><span class="tag-label-text">玩什么类型</span><span class="tag-label-count"></span><svg class="tag-label-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+      <span class="tag-label" data-group="1"><span class="tag-label-text">要什么感觉</span><span class="tag-label-count"></span><svg class="tag-label-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+      <span class="tag-label" data-group="2"><span class="tag-label-text">在什么场景</span><span class="tag-label-count"></span><svg class="tag-label-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </div>
+    <div id="tag-panel" class="tag-panel hidden"></div>
+  </div>
+
+  <div id="ai-understand" class="ai-understand hidden"></div>
+
+  <div id="results" class="results"></div>
+  <button id="load-more" class="load-more hidden">加载更多</button>
+
+  <div id="loading" class="loading hidden">
+    <div class="breathe"><i></i><i></i><i></i></div>
+    <div class="loading-stages">
+      <div class="loading-stage" id="stage-parse"><span class="stage-dot"></span>AI 正在理解你的需求…</div>
+      <div class="loading-stage" id="stage-search"><span class="stage-dot"></span>正在匹配游戏库…</div>
+      <div class="loading-stage" id="stage-select"><span class="stage-dot"></span>正在精选推荐…</div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <div id="empty" class="empty hidden">
+    <p>没找到匹配的结果，换个描述试试？</p>
+    <div id="alternatives" class="alternatives"></div>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
