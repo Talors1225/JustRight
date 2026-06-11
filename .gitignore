@@ -1,7 +1,0 @@
-node_modules/
-.env
-data/*.db
-data/*.db-journal
-data/.*-progress.json
-scripts/
-build-log.txt
